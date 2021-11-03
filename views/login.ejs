@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+<body>
+    <div class="wrapper">
+    <h1>Login Admin</h1>
+        <table class="table_login">
+            <tr>
+                <th>Username : </th>
+                <td><input id="username" class="username" type="text"></td>
+            </tr>
+            <tr>
+                <th>Password : </th>
+                <td><input id="password" class="password" type="text"></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center"><button class="btn_submit" onClick="login(event)">Submit</button></td>
+                <td></td>
+            </tr>
+            <td colspan="2">
+                <div id="eror" class="eror"></div>
+            </td>
+            <td></td>
+        </table>
+       
+    </div>
+    <script>
+        const login = e =>{
+            console.log("login");
+            e.preventDefault();
+            
+            const user = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const eror = document.getElementById('eror');
+  
+            const option = {
+                headers:{
+                    "Content-Type": "application/json"
+                },
+                method: "POST",
+                body: JSON.stringify({
+                    user: user,
+                    password: password
+                }),
+            }    
+              
+            fetch(`/api/login`, option).then(async(res) => {
+                const data = await res.json();
+                console.log(data);
+                if(data.user)
+                {
+                    location.href = "/dashboard";
+                }
+                else if(!data.user){
+                    eror.innerHTML = "Validasi Error";
+                }
+            });
+ 
+        }
+    </script>
+</body>
+
+</html>
