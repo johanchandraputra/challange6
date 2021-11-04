@@ -11,21 +11,36 @@
 
 <body>
     <div class="wrapper">
-
         <table>
-            <form action="/dashboard" method="post">
-                <tr>
-                    <td>
-                        <div>username : <input id="username" class="username" type="text"></div>
-                        <div>password : <input id="password" class="password" type="text"></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="btn_create"> Create new User, <input type="button" value="submit"></div>
-                    </td>
-                </tr>
-            </form>
+            <% if(mode === "Create"){ %>
+                <form action="/dashboard" method="post">
+                    <tr>
+                        <td align="right">
+                            <div>Username : <input id="username" class="username" name="username" type="text" /></div>
+                            <div>Password : <input id="password" class="password" name="password" type="text" /></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="btn_create"> Create <input type="submit" value="submit" /></div>
+                        </td>
+                    </tr>
+                </form>
+              <% } else{ %>
+                <form action="/dashboard" method="patch">
+                    <tr>
+                        <td align="right">
+                            <div>Username : <input name="username" type="text" value="<%=username%>" /></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="btn_create"> Update, ID = <%=id%> <input type="submit" value="submit" onClick="update_user('<%=id%>')"/></div>
+                        </td>
+                    </tr>
+                </form>
+             <% } %>
+            
         </table>
         <table class="table_admin">
             <tr>
@@ -41,14 +56,34 @@
                     <td class="border_table">
                         <%= user.username %>
                     </td>
-                    <td class="border_table"><button>Update</button></td>
-                    <td class="border_table"><button>Delete</button></td>
+                    <td class="border_table"><button onClick="update('<%= user.id %>','<%= user.username %>')">Update</button></td>
+                    <td class="border_table"><button onClick="del('<%= user.id %>')">Delete</button></td>
                 </tr>
                 <% }); %>
 
         </table>
     </div>
-  
+    <script>
+        const del = (id) => {
+            fetch(`/dashboard/` + id, { method: "DELETE" }).then(async (res) => {
+                const data = await res.json();
+                location.href = "/dashboard";
+
+            });
+        }
+
+        const update = (id,username) => {
+            location.href = "/dashboard/"+id+"?username="+username;
+        }
+
+        const update_user = (id) => {
+            fetch(`/dashboard/`+id, { method: "PATCH" }).then(async (res) => {
+                const data = await res.json();
+                location.href = "/dashboard";
+
+            });
+        }
+    </script>
 </body>
 
 </html>

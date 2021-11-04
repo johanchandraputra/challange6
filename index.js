@@ -1,10 +1,11 @@
 const express = require("express");
 const path = require("path");
+const bodyParser = require("body-parser");
 
 const app = express();
 app.use(express.static("./public"));
 app.use(express.json());
-
+app.use(bodyParser.urlencoded({ extended: false }));
 
 const userRouter = require("./api/user/user_data");
 const biodataRouter = require("./api/user_biodata/user_biodata");
@@ -12,6 +13,7 @@ const historiesRouter = require('./api/user_histories/user_histories');
 const route = require('./router/login');
 const login = require("./src/login");
 const userWeb = require("./web/user/user_web");
+
 
 app.use("/api/user", userRouter);
 app.use("/api/user_biodata", biodataRouter);
