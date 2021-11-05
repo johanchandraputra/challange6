@@ -27,10 +27,10 @@
                     </tr>
                 </form>
               <% } else{ %>
-                <form action="/dashboard" method="patch">
+                <form>
                     <tr>
                         <td align="right">
-                            <div>Username : <input name="username" type="text" value="<%=username%>" /></div>
+                            <div>Username : <input id="usernameUpdate" name="usernameUpdate" type="text" value="<%=username%>" /></div>
                         </td>
                     </tr>
                     <tr>
@@ -40,7 +40,7 @@
                     </tr>
                 </form>
              <% } %>
-            
+
         </table>
         <table class="table_admin">
             <tr>
@@ -77,10 +77,19 @@
         }
 
         const update_user = (id) => {
-            fetch(`/dashboard/`+id, { method: "PATCH" }).then(async (res) => {
+            const user = document.getElementById('usernameUpdate').value;
+            const option = {
+                headers:{
+                    "Content-Type": "application/json"
+                },
+                method: "PATCH",
+                body: JSON.stringify({
+                    username: user,
+                }),
+            }    
+            fetch(`/dashboard/`+id, option).then(async (res) => {
                 const data = await res.json();
                 location.href = "/dashboard";
-
             });
         }
     </script>
